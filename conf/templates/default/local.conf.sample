@@ -1,0 +1,119 @@
+#
+# This file is your local configuration file and is where all local user settings
+# are placed. The comments in this file give some guide to the options a new user
+# to the system might want to change but pretty much any configuration option can
+# be set in this file.
+#
+# Lines starting with the '#' character are commented out and in some cases the
+# default values are provided as comments to show people example syntax. Enabling
+# the option is a question of removing the # character and making any change to the
+# variable as required.
+
+#
+# Machine Selection
+#
+# You need to select a specific machine to target the build with. These are the
+# machines which target the Toradex Apalis, Colibri and Verdin computer on
+# module families:
+#
+
+# Toradex Modules based on i.MX 6/6ULL/7 are only supported with the
+# tdx-xwayland-upstream DISTRO which builds a kernel pulled from
+# kernel.org and use matching userspace components.
+#MACHINE ?= "apalis-imx6"
+#MACHINE ?= "colibri-imx6"
+#MACHINE ?= "colibri-imx6ull"
+#MACHINE ?= "colibri-imx6ull-emmc"
+#MACHINE ?= "colibri-imx7"
+#MACHINE ?= "colibri-imx7-emmc"
+#
+# Toradex Modules based on SoC of the i.MX 8/9 family are supported with the
+# tdx-xwayland DISTRO which builds a kernel based on NXP's downstream fork
+# and matching userspace components. Support with tdx-xwayland-upstream
+# DISTRO is experimental and currently only builds for Verdin modules.
+#MACHINE ?= "apalis-imx8"
+#MACHINE ?= "aquila-imx95"
+#MACHINE ?= "colibri-imx8x"
+#MACHINE ?= "lino-imx93"
+#MACHINE ?= "toradex-osm-imx93"
+#MACHINE ?= "toradex-smarc-imx8mp"
+#MACHINE ?= "toradex-smarc-imx95"
+#MACHINE ?= "verdin-imx8mm"
+#MACHINE ?= "verdin-imx8mp"
+#MACHINE ?= "verdin-imx95"
+#
+# Toradex Modules based on SoC of the TI AM62x family are supported with the
+# tdx-xwayland DISTRO which builds a kernel based on TI downstream fork
+# and matching userspace components.
+#MACHINE ?= "aquila-am69"
+#MACHINE ?= "verdin-am62"
+#MACHINE ?= "verdin-am62p"
+
+#
+# Where to place downloads
+#
+DL_DIR ?= "${TOPDIR}/../downloads"
+
+#
+# Where to place shared-state files
+#
+SSTATE_DIR ?= "${TOPDIR}/../sstate-cache"
+
+#
+# Where to place images and sw packages
+#
+# In case of a multiconfig (e.g. TI's k3 architecture), separate the deploy dirs.
+# All native recipe deploy identical license files into the deploy directories.
+# If having one deploy directory for all configs this results in build errors
+# for any build executed after the first one. Thus configure a deploy directory
+# with the name of the multiconfig inside the default deploy directory.
+#
+DEPLOY_DIR = "${TOPDIR}/deploy${@'' if d.getVar('BB_CURRENT_MC') == 'default' else '/${BB_CURRENT_MC}'}"
+
+#
+# Package Management configuration
+#
+PACKAGE_CLASSES ?= "package_ipk"
+
+#
+# Disk Space Monitoring during the build
+#
+BB_DISKMON_DIRS ??= "\
+    STOPTASKS,${TMPDIR},1G,100K \
+    STOPTASKS,${DL_DIR},1G,100K \
+    STOPTASKS,${SSTATE_DIR},1G,100K \
+    STOPTASKS,/tmp,100M,100K \
+    HALT,${TMPDIR},100M,1K \
+    HALT,${DL_DIR},100M,1K \
+    HALT,${SSTATE_DIR},100M,1K \
+    HALT,/tmp,10M,1K"
+
+USER_CLASSES ?= "buildstats"
+
+PATCHRESOLVE = "noop"
+
+#
+# Parallelism Options
+#
+# These two options control how much parallelism BitBake should use. The first
+# option determines how many tasks bitbake should run in parallel:
+# Default to setting automatically based on cpu count
+BB_NUMBER_THREADS ?= "${@oe.utils.cpu_count()}"
+#
+# The second option controls how many processes make should run in parallel when
+# running compile tasks:
+# Default to setting automatically based on cpu count
+PARALLEL_MAKE ?= "-j ${@oe.utils.cpu_count()}"
+
+# CONF_VERSION is increased each time build/conf/ changes incompatibly and is used to
+# track the version of this file when it was generated. This can safely be ignored if
+# this doesn't mean anything to you.
+CONF_VERSION = "2"
+
+DISTRO = "flasher"
+
+# This file does not need to exist; if it does it can be used to influence
+# machine-specific configurations without copying the machine file.
+include conf/machine/include/${MACHINE}.inc
+
+# DO NOT SET THE MACHINE AFTER THE ABOVE INCLUDE

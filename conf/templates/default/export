@@ -1,0 +1,37 @@
+#!/bin/sh
+# Source this script from the workspace root to set up the Toradex Flasher
+# build environment:
+#
+#   . layers/meta-toradex-flasher/conf/templates/default/export [<build-dir>]
+#
+# Or copy/symlink it to the workspace root and source it from there:
+#
+#   . export
+
+if [ -n "$BASH_SOURCE" ]; then
+    THIS_SCRIPT_DIR="$(dirname $BASH_SOURCE)"
+elif [ -n "$ZSH_NAME" ]; then
+    THIS_SCRIPT_DIR="$(dirname $0)"
+else
+    THIS_SCRIPT_DIR="$(pwd)"
+fi
+
+BLD_DIR="${1:-build}"
+TOP_DIR=$(realpath $THIS_SCRIPT_DIR)
+TEMPLATECONF=$TOP_DIR/layers/meta-toradex-flasher/conf/templates/default
+
+if [ ! -r "$TOP_DIR/$BLD_DIR/conf/local.conf" ]; then
+    FIRST_TIME="yes"
+fi
+
+set -- "$BLD_DIR"
+. $TOP_DIR/layers/openembedded-core/oe-init-build-env
+
+if [ ! -z "$FIRST_TIME" ]; then
+    cat <<EOM
+Check and edit conf/local.conf to adapt to your local needs.
+The following likely need your attention:
+  MACHINE  - select the target Toradex SoM
+  DL_DIR   - location for downloaded source archives
+EOM
+fi

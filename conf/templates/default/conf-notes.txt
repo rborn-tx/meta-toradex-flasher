@@ -1,0 +1,8 @@
+
+### Shell environment set up for Toradex Flasher builds. ###
+
+You can now run 'bitbake <target>'
+
+Toradex Flasher targets are:
+    toradex-flasher
+

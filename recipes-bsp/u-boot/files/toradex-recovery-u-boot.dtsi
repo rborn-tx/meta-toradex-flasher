@@ -1,0 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0+ OR X11
+/*
+ * Copyright 2023 Toradex AG
+ */
+
+/ {
+	config {
+		environment {
+			bootdelay = "0";
+			recovery_mode = "1";
+		};
+	};
+};
