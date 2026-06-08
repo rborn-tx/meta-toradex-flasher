@@ -54,6 +54,34 @@ branch: scarthgap
 revision: HEAD
 ```
 
+## Supported SoMs
+
+| Machine Name         | Corresponding Toradex Module                   | Supported |
+|----------------------|------------------------------------------------|-----------|
+| aquila-imx95         | Aquila iMX95                                   | Not yet   |
+| aquila-am69          | Aquila AM69/TDA4                               | Not yet   |
+| verdin-imx8mm        | Verdin iMX8M Mini                              | Yes       |
+| verdin-imx8mp        | Verdin iMX8M Plus                              | Yes       |
+| verdin-imx95         | Verdin iMX95                                   | Not yet   |
+| verdin-am62          | Verdin AM62                                    | Not yet   |
+| verdin-am62p         | Verdin AM62P                                   | Not yet   |
+| toradex-smarc-imx8mp | SMARC iMX8M Plus                               | Not yet   |
+| toradex-smarc-imx95  | SMARC iMX95                                    | Not yet   |
+| apalis-imx6          | Apalis iMX6                                    | Yes       |
+| apalis-imx8          | Apalis iMX8                                    | Not yet   |
+| colibri-imx6         | Colibri iMX6                                   | Yes       |
+| colibri-imx6ull-emmc | Colibri iMX6ULL 1GB (equipped with eMMC flash) | Yes       |
+| colibri-imx7-emmc    | Colibri iMX7D 1GB (equipped with eMMC flash)   | Yes       |
+| colibri-imx8x        | Colibri iMX8X V1.0C or newer                   | Not yet   |
+
+## Building the flashing tool
+
+For build instructions see [docs/BUILD.md](docs/BUILD.md).
+
+## Using the flashing tool
+
+For usage instructions see [docs/USAGE.md](docs/USAGE.md).
+
 ## Contributing
 
 This layer is maintained by Toradex.
