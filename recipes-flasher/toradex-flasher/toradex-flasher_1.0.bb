@@ -83,6 +83,13 @@ do_flasher_zip() {
     # fastboot.uuu: prepend all lines up to and including the CFG line so that
     # the full SDP boot sequence is present before entering Fastboot mode.
     head -n "${cfg_line_num}" "${uuu_auto}" > "${staging}/flash/fastboot.uuu"
+
+    # Bootloader binaries will be kept in flash/ alongside the UUU scripts; strip
+    # the ../ prefix that uuu.auto uses for the Tezi layout where they are one
+    # level up.
+    sed -E "s#^(SDP[SV]*: (boot|write) -f )\.\./#\1#" \
+	-i "${staging}/flash/fastboot.uuu"
+
     if [ -n "${UUU_SDP_BOOT_EXTRA_ARGS}" ]; then
         sed "s|^\(SDP:.*boot.*\)|\1 ${UUU_SDP_BOOT_EXTRA_ARGS}|" \
             -i "${staging}/flash/fastboot.uuu"
@@ -109,7 +116,7 @@ do_flasher_zip() {
         if [ ! -f "${bootloader}" ]; then
             bbfatal "Bootloader binary not found: ${bootloader}"
         fi
-        install -m 0644 "${bootloader}" "${staging}/"
+        install -m 0644 "${bootloader}" "${staging}/flash/"
     done
 
     # --- uuu host binaries ---
