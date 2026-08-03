@@ -133,7 +133,7 @@ call :hdr "Flashing was successful!"
 exit /b 0
 
 :show_help
-echo Usage: flash-linux.bat [-q^-v]
+echo Usage: flash-windows.bat [-q^-v]
 echo.                   [--erase-user ^| --no-erase-user]
 echo.                   [--erase-boot ^| --no-erase-boot]
 echo.                   [--spl SPL_IMAGE]
@@ -141,7 +141,8 @@ echo.                   --wic WIC_IMAGE --bootloader BOOTLOADER_IMAGE
 echo.
 echo Mandatory switches:
 echo.    --wic          Path to WIC image to flash.
-echo.    --bootloader   Path to bootloader image to flash.
+echo.    --bootloader   Path to bootloader image to flash, normally shipped
+echo.                   alongside the WIC image being flashed (see note 1).
 echo.
 echo Optional switches:
 echo.    -q^-v
@@ -150,7 +151,27 @@ echo.    --erase-user^|--no-erase-user
 echo.                   Whether or not to erase the user data partition before flashing.
 echo.    --erase-boot^|--no-erase-boot
 echo.                   Whether or not to erase the boot partitions.
-echo.    --spl          Path to SPL image to flash (optional).
+echo.    --spl          Path to SPL image to flash (optional), normally shipped
+echo.                   alongside the WIC image being flashed (see note 1).
+echo.
+echo Examples:
+echo.    Recommended usage when re-flashing a device (verdin-imx8mm):
+echo.    ^> flash-windows.bat ^^
+echo.        --wic "C:\path\to\os-artifacts\torizon-minimal-verdin-imx8mm.wic" ^^
+echo.        --bootloader "C:\path\to\os-artifacts\flash.bin"
+echo.
+echo.    When flashing a device for the first time, the time consuming
+echo.    erasing of the user data partition can be avoided like this:
+echo.    ^> flash-windows.bat ^^
+echo.        --wic "C:\path\to\os-artifacts\torizon-minimal-verdin-imx8mm.wic" ^^
+echo.        --bootloader "C:\path\to\os-artifacts\flash.bin" ^^
+echo.        --no-erase-user
+echo.
+echo Notes:
+echo.    1. Do not pass bootloader binaries from this flashing-tool package to the
+echo.       --bootloader or --spl switches. Files under flash\ are used internally
+echo.       by the tool. Supply the bootloader that was built and released with the
+echo.       WIC image you are flashing.
 exit /b 0
 
 :hdr

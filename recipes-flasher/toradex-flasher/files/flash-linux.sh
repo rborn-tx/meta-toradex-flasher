@@ -12,7 +12,7 @@ BL_IMG_LINK="./bootloader.lnk"
 SPL_IMG_LINK="./spl-image.lnk"
 
 help() {
-    cat <<EOF
+    cat <<'EOF'
 Usage: flash-linux.sh [-q|-v]
                       [--erase-user|--no-erase-user]
                       [--erase-boot|--no-erase-boot]
@@ -22,7 +22,8 @@ Usage: flash-linux.sh [-q|-v]
 
 Mandatory switches:
     --wic          Path to WIC image to flash.
-    --bootloader   Path to bootloader image to flash.
+    --bootloader   Path to bootloader image to flash, normally shipped
+                   alongside the WIC image being flashed (see note 1).
 
 Optional switches:
     -q|-v
@@ -32,15 +33,27 @@ Optional switches:
                    before flashing the WIC image into it.
     --erase-boot|--no-erase-boot
                    Whether or not to erase the boot parititions.
-    --spl          Path to SPL image to flash (optional).
+    --spl          Path to SPL image to flash (optional), normally shipped
+                   alongside the WIC image being flashed (see note 1).
 
 Examples:
-    # Recommended usage when re-flashing a device:
-    $ sudo ./flash-linux.sh --wic image.wic --bootloader flash.bin
+    # Recommended usage when re-flashing a device (verdin-imx8mm):
+    $ sudo ./flash-linux.sh \
+           --wic /path/to/os-artifacts/torizon-minimal-verdin-imx8mm.wic \
+           --bootloader /path/to/os-artifacts/flash.bin
 
     # When flashing a device for the first time, the time consuming
     # erasing of the user data partition can be avoided like this:
-    $ sudo ./flash-linux.sh --wic image.wic --bootloader flash.bin --no-erase-user
+    $ sudo ./flash-linux.sh \
+           --wic /path/to/os-artifacts/torizon-minimal-verdin-imx8mm.wic \
+           --bootloader /path/to/os-artifacts/flash.bin \
+           --no-erase-user
+
+Notes:
+    1. Do not pass bootloader binaries from this flashing-tool package to the
+       --bootloader or --spl switches. Files under flash/ are used internally
+       by the tool. Supply the bootloader that was built and released with the
+       WIC image you are flashing.
 
 EOF
 }
