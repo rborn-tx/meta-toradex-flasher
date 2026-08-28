@@ -105,10 +105,25 @@ do_flasher_zip() {
     done
 
     # --- Static host scripts and documentation ---
-    install -m 0755 "${WORKDIR}/flash-linux.sh"       "${staging}/"
-    install -m 0755 "${WORKDIR}/flash-windows.bat"    "${staging}/"
-    install -m 0644 "${WORKDIR}/flash-linux.README"   "${staging}/"
-    install -m 0644 "${WORKDIR}/flash-windows.README" "${staging}/"
+    # Give each file the line endings its consumer needs, whatever the checkout
+    # supplied: cmd.exe cannot resolve GOTO/CALL labels without CRLF, and a CR on
+    # a shebang line is fatal. Stripping CR first keeps the conversion idempotent.
+    to_crlf() {
+        sed -e 's/\r$//' -e 's/$/\r/' "$1" > "$2"
+    }
+
+    to_lf() {
+        sed -e 's/\r$//' "$1" > "$2"
+    }
+
+    to_lf   "${WORKDIR}/flash-linux.sh"         "${staging}/flash-linux.sh"
+    chmod 0755 "${staging}/flash-linux.sh"
+    to_crlf "${WORKDIR}/flash-windows.bat"      "${staging}/flash-windows.bat"
+    chmod 0755 "${staging}/flash-windows.bat"
+    to_lf   "${WORKDIR}/flash-linux.README"     "${staging}/flash-linux.README"
+    chmod 0644 "${staging}/flash-linux.README"
+    to_crlf "${WORKDIR}/flash-windows.README"   "${staging}/flash-windows.README"
+    chmod 0644 "${staging}/flash-windows.README"
 
     # --- Bootloader binaries ---
     for binary in ${FLASHER_BOOTLOADER_BINARIES}; do
