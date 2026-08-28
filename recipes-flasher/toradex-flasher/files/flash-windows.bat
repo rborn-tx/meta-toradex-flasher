@@ -176,7 +176,7 @@ exit /b 0
 
 :hdr
 if %VERBOSITY% GEQ 1 (
-    echo= %~1
+    echo.= %~1
     if %VERBOSITY% GEQ 2 echo.
 )
 exit /b 0
