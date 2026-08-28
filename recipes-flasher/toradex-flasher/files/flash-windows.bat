@@ -1,5 +1,5 @@
 @echo off
-setlocal enabledelayedexpansion
+setlocal
 
 REM Defaults
 set "VERBOSITY=2"
