@@ -191,7 +191,10 @@ if %VERBOSITY% GEQ 3 (
 ) else (
     .\flash\uuu.exe %UUU_ARGS% %* >nul
 )
-exit /b %ERRORLEVEL%
+REM uuu exits -1 when a command fails, and IF ERRORLEVEL is a signed
+REM comparison that -1 does not satisfy, so report 0 or 1 and nothing else.
+if %ERRORLEVEL% NEQ 0 exit /b 1
+exit /b 0
 
 :exit_error
 echo ERROR: Failed to flash device.
